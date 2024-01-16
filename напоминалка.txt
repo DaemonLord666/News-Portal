@@ -1,0 +1,28 @@
+установка ВМ
+python -m venv venv
+
+запуск ВМ
+venv\scripts\activate
+
+установка джанго
+pip install django
+
+создание пустого проекта джанго
+django-admin startproject project
+
+Переходим в папку project в нашем терминале или cmd (если вы на Windows):
+cd project
+
+создаём приложение
+python manage.py startapp NewsPortal
+
+Создаём миграции
+python manage.py makemigrations
+
+Если не работает, то удалить migrations, созданные таблицы и миграцию в таблице django_migrations - т.е. откатиться
+
+применяем миграции
+python manage.py migrate
+
+запускаем shell
+python manage.py shell

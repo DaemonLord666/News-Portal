@@ -1,0 +1,112 @@
+запускаем Shell
+python manage.py shell
+
+импортируем модель
+from NewsPortal.models import *
+
+создаём пользователей
+u1 = User.objects.create_user(username='Sergey')
+u2 = User.objects.create_user(username='Vladimir')
+
+создаём авторов, связанных с пользователями
+Author.objects.create(authorUser=u1)
+Author.objects.create(authorUser=u2)
+
+создаём категории
+Category.objects.create(name='IT')
+Category.objects.create(name='Sport')
+Category.objects.create(name='Vehicles')
+Category.objects.create(name='Games')
+
+Получаем автора по id, чтобы было легче
+author = Author.objects.get(id=1)
+author2 = Author.objects.get(id=2)
+
+создаём посты
+Post.objects.create(author=author, categoryType='NW', title='Important news', text='there is a big news')
+Post.objects.create(author2=author, categoryType='AR', title='Healthing', text='Make sport is very healthy')
+Post.objects.create(author=author, categoryType='AR', title='Python', text='Python: print("Hello world")')
+
+
+К статьям/новостям присваиваем категории:
+Post.objects.get(id=1).postCategory.add(Category.objects.get(id=1))
+Post.objects.get(id=2).postCategory.add(Category.objects.get(id=2))
+Post.objects.get(id=3).postCategory.add(Category.objects.get(id=1))
+Post.objects.get(id=1).postCategory.add(Category.objects.get(id=3))
+Post.objects.get(id=2).postCategory.add(Category.objects.get(id=4))
+Post.objects.get(id=3).postCategory.add(Category.objects.get(id=3))
+
+
+Создаем комментарии к статьям/новостям:
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=Author.objects.get(id=1).authorUser, text='greate post')
+Comment.objects.create(commentPost=Post.objects.get(id=1), commentUser=Author.objects.get(id=2).authorUser, text='interesting news')
+Comment.objects.create(commentPost=Post.objects.get(id=2), commentUser=Author.objects.get(id=2).authorUser, text='LoL')
+Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=Author.objects.get(id=1).authorUser, text='Python is the best prog')
+Comment.objects.create(commentPost=Post.objects.get(id=3), commentUser=Author.objects.get(id=2).authorUser, text='Hello Skillfactory')
+
+
+Применям функции like() и dislike() к комментариям:
+Comment.objects.get(id=1).like()
+Comment.objects.get(id=1).dislike()
+Comment.objects.get(id=1).dislike()
+Comment.objects.get(id=1).dislike()
+Comment.objects.get(id=2).like()
+Comment.objects.get(id=2).like()
+Comment.objects.get(id=2).like()
+Comment.objects.get(id=3).like()
+Comment.objects.get(id=3).like()
+Comment.objects.get(id=4).like()
+Comment.objects.get(id=5).dislike()
+Comment.objects.get(id=2).rating
+Comment.objects.get(id=3).rating
+Comment.objects.get(id=4).rating
+Comment.objects.get(id=5).rating
+
+
+Применям функции like() и dislike() к статьям/новостям:
+Post.objects.get(id=1).dislike()
+Post.objects.get(id=2).like()
+Post.objects.get(id=3).like()
+Post.objects.get(id=3).like()
+Post.objects.get(id=3).dislike()
+Post.objects.get(id=2).like()
+Post.objects.get(id=1).like()
+Post.objects.get(id=1).like()
+Post.objects.get(id=2).dislike()
+Post.objects.get(id=1).like()
+Post.objects.get(id=2).dislike()
+Post.objects.get(id=1).dislike()
+Post.objects.get(id=2).like()
+Post.objects.get(id=2).like()
+
+Присваиваем в переменную а и b и обновляем рейтинги пользователей:
+a = Author.objects.get(id=1)
+a.update_rating()
+a.ratingAuthor
+b = Author.objects.get(id=2)
+b.update_rating()
+b.ratingAuthor
+
+username и рейтинг лучшего пользователя(применяя сортировку и возвращая поля первого объекта).
+a = Author.objects.order_by('-ratingAuthor')[:1]
+for i in a:
+	i.ratingAuthor
+	i.authorUser.username
+
+Вывести дату добавления, username автора, рейтинг, заголовок и превью лучшей статьи, основываясь на лайках/дислайках к этой статье.
+bestPost = Post.objects.order_by('-rating')[:1]
+for i in bestPost:
+	i.dateCreation
+	i.author.authorUser
+	i.rating
+	i.title
+	i.preview()
+
+Выводим все комментарии (дата, пользователь, рейтинг, текст) к этой статье.
+bestPostCom = Comment.objects.filter(commentPost=bestPost[0].id)
+
+for k in bestPostCom:
+	k.dateCreating
+	k.commentUser
+	k.rating
+	k.text
