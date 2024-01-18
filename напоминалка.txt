@@ -26,3 +26,6 @@ python manage.py migrate
 
 запускаем shell
 python manage.py shell
+
+запускаем сервер
+python manage.py runserver
