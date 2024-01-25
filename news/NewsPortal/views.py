@@ -4,6 +4,9 @@ from .models import Post, Author, Category
 from datetime import datetime
 from .filters import PostFilter
 from .forms import PostForm
+# from django.utils.decorators import method_decorator
+# from django.contrib.auth.decorators import login_required
+# from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 class PostsList(ListView):
     model = Post
