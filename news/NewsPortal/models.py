@@ -24,13 +24,15 @@ class Author(models.Model):
     def __str__(self):
         return f'{self.authorUser.username}'
 
-    
 class Category(models.Model):
     name = models.CharField(max_length=64, unique=True)
+    subscribers = models.ManyToManyField(User, related_name = 'member')
     
     def __str__(self):
         return f'{self.name}'
     
+
+
 class Post (models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     
@@ -62,18 +64,18 @@ class Post (models.Model):
         self.save()    
     
     def __str__(self):
-        return f'{self.categoryType.CATEGORY_CHOICES}'    
+        if self.categoryType == "NW":
+            return "Новость"
+        else:
+            return "Статья"
     
     
     def get_absolute_url(self):  # добавим абсолютный путь, чтобы после создания нас перебрасывало на страницу с товаром
         return f'/news/{self.id}'
     
-
-
 class PostCategory(models.Model):
     postThrough = models.ForeignKey(Post, on_delete=models.CASCADE)
     categoryThrough = models.ForeignKey(Category, on_delete=models.CASCADE)
-
     
 class Comment(models.Model):
     commentPost = models.ForeignKey(Post, on_delete=models.CASCADE)

@@ -10,9 +10,12 @@ Delete
 <h2>Вы действительно хотите удалить данный пост?</h2>
 <h1>Название - {{ object.title | Censor }}</h1>
 <p>Текст - {{ object.text | Censor}}</p>
-<p>Автор - {{ object.author }}</p>
-<p>Дата загрузки - {{ object.dateCreation }}</p>
-
+<p>Автор - {{ object.author.authorUser }}</p>
+<p>Категория - {{ object.categoryType }}</p>
+<p>Рейтинг - {{ object.rating }}</p>
+{% for a in object.postCategory.all %}
+	<p> Категории - {{ a }}</p>
+{% endfor %}
 <form method="POST">
     {% csrf_token %}
     <input type="submit" value="подтвердить"></form>

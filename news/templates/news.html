@@ -8,10 +8,19 @@
 {% endblock title %}
 
 {% block content %}
+	<style type="text/css">
+		TABLE {
+			border-collapse: collapse; /* Убираем двойные линии между ячейками */
+			border: 2px solid white; /* Прячем рамку вокруг таблицы */
+			}
+		TD, TH {
+			padding: 3px; /* Поля вокруг содержимого таблицы */
+			border: 1px solid maroon; /* Параметры рамки */
+		}
+	</style>
     <h1>Все новости</h1>
     <h3>{{ time_now|date:'M d Y' }}</h3>
     <h6>Всего новостей - {{ news | length }}</h6>
-    <hr>
     {% if news %}
         <table class="col-lg-12 text-center">
             <tr>
@@ -23,6 +32,9 @@
                 </td>
                 <td>
                     <b>Дата</b>
+                </td>
+				<td>
+                    <b>Категории</b>
                 </td>
 				<td>
                     <b>Действия</b>
@@ -40,11 +52,16 @@
                 <td style="text-align: center">
                     {{ new.dateCreation }}
                 </td>
+				<td>
+					{% for a in new.postCategory.all %}
+						<p> Категории - {{ a }}</p>
+					{% endfor %}
+				</td>
 				<td style="text-align: center">
 					<a href="{% url 'post_update' new.id %}"><u>Редактировать</u></a> <!-- добавим ссылку на редактирование товара-->
                     <a href="{% url 'post_delete' new.id %}"><u> Удалить </u></a> <!-- добавим ссылку на удаление товара-->
 				</td>
-            </tr>
+			</tr>
         {% endfor %}
         </table>
     {% else %}
@@ -74,6 +91,8 @@
         <a href="?page={{ page_obj.next_page_number }}">>>></a>
         <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
     {% endif %}
+	
+	
 
 {% endif %}
 

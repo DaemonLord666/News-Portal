@@ -34,10 +34,10 @@
                         <li class="nav-item">
                             <a class="nav-link" href="http://127.0.0.1:8000/admin">AdminPanel</a>
                         </li>
+						<li class="nav-item">
+                            <a class="nav-link" href="http://127.0.0.1:8000/news/category">Категории</a>
+                        </li>
 						{% if not request.user.is_authenticated %}
-							<li class="nav-item">
-								<a class="nav-link" href="http://127.0.0.1:8000/sign/login">Логин по имени</a>
-							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="http://127.0.0.1:8000/accounts/login">Логин по email/gmail</a>
 							</li>

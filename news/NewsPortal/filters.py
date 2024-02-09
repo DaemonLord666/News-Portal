@@ -2,7 +2,7 @@ from django.forms import DateInput
 from django_filters import FilterSet, CharFilter, \
     ModelMultipleChoiceFilter, DateFilter, \
     ModelChoiceFilter  # импортируем filterset, чем-то напоминающий знакомые дженерики
-from .models import Post, Author
+from .models import *
 
 
 # создаём фильтр
@@ -24,6 +24,10 @@ class PostFilter(FilterSet):
         label='Даты позже'
     )
 
+
+
+
     class Meta:
         model = Post
         fields = []
+

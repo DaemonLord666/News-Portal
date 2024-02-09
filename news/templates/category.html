@@ -1,0 +1,23 @@
+{% extends 'flatpages/default.html' %}
+
+
+{% load custom_filters %}
+
+{% block title %}
+News
+{% endblock title %}
+
+{% block content %}
+<h2> Все категории </h2>
+{% for a in category.all %}
+	<p> Категории - {{ a }}</p>
+	{% if request.user in a.subscribers.all %}
+		<button><a href="{% url 'del_subscribe' a.id%}"><u>Отписаться</u></a> </button>
+	{% else %}
+		<button><a href="{% url 'add_subscribe' a.id%}"><u>Подписаться</u></a> </button>
+	{%endif%}
+
+{% endfor %}
+
+
+{% endblock content %}
