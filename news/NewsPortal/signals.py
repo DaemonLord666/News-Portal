@@ -8,7 +8,6 @@ from .views import send_mail_for_sub
 
 @receiver(post_save, sender=Post)
 def send_sub_mail(sender, instance, created, **kwargs):
-    if created:
-        send_mail_for_sub(instance, True)
-    else:
-        send_mail_for_sub(instance, False)
+    print('Сигнал - начало')
+    send_mail_for_sub(instance)
+    print('Сигнал - конец')

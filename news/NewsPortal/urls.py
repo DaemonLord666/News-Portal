@@ -4,12 +4,6 @@ from .views import PostsList, PostDetail, PostSearch, PostAdd
 from .views import PostUpdateView, PostDeleteView, add_subscribe, del_subscribe, CategoryList
 
 urlpatterns = [
-   # path — означает путь.
-   # В данном случае путь ко всем товарам у нас останется пустым,
-   # чуть позже станет ясно почему.
-   # Т.к. наше объявленное представление является классом,
-   # а Django ожидает функцию, нам надо представить этот класс в виде view.
-   # Для этого вызываем метод as_view.
    path('', PostsList.as_view()), 
    path('<int:pk>', PostDetail.as_view(), name='post_detail'),
    path('search', PostSearch.as_view()),

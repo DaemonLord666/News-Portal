@@ -1,0 +1,16 @@
+запуск ВМ
+venv\scripts\activate
+
+запуск Redis
+redis-server.exe
+
+потом
+
+запуск celery в news
+celery -A news worker -l INFO --pool=solo
+
+запуск переодических задач
+celery -A news beat -l INFO
+
+потом запуск проекта из news
+python manage.py runserver

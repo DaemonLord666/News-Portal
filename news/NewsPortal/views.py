@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import HttpResponse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
 from .models import Post, Author, Category
 from datetime import datetime
@@ -12,7 +13,7 @@ from django.core.mail import send_mail
 from datetime import datetime
 from django.shortcuts import redirect
 from django.core.mail import EmailMultiAlternatives
-
+from .tasks import send_mail_for_sub_once
 
 class CategoryList(ListView):
     model = Category
@@ -126,9 +127,19 @@ def del_subscribe(request, **kwargs):
 
 
 
-def send_mail_for_sub(instance, created):
-
+def send_mail_for_sub(instance):
+    
     sub_text = instance.text
+    # category = Category.objects.get(pk=Post.objects.get(pk=instance.pk).category.pk)
+    # subscribers = category.subscribers.all()
+    # for subscriber in subscribers:
+
+        # html_content = render_to_string(
+            # 'mail.html', {'user': subscriber, 'text': sub_text[:50], 'post': instance})
+
+        # sub_username = subscriber.username
+        # sub_useremail = subscriber.email
+        # print (sub_useremail)
     
     for a in instance.postCategory.all():
         subscribers = a.subscribers.all()
@@ -137,18 +148,16 @@ def send_mail_for_sub(instance, created):
                 'mail.html', {'user': subscriber, 'text': sub_text[:50], 'post': instance})
             sub_username = subscriber.username
             sub_useremail = subscriber.email
-            if created:
-                subject=f'Здравствуй, {sub_username}. Новая статья в вашем разделе! {a}'
-            else:
-                subject=f'Здравствуй, {sub_username}. Статья в вашем разделе была изменена! {a}'
-            msg = EmailMultiAlternatives(
-                subject,
-                body = sub_text,
-                from_email='levafive.876@yandex.ru',
-                to=[sub_useremail]
-                )
-            msg.attach_alternative(html_content, 'text/html')
-            msg.send()
+            send_mail_for_sub_once.delay(sub_username, sub_useremail, html_content)
+            # subject=f'Здравствуй, {sub_username}. Новая статья в вашем разделе! {a}'
+            # msg = EmailMultiAlternatives(
+                # subject,
+                # body = sub_text,
+                # from_email='levafive.876@yandex.ru',
+                # to=[sub_useremail]
+                # )
+            # msg.attach_alternative(html_content, 'text/html')
+            # msg.send()
             print (sub_useremail)
     
     return redirect('/news/')
